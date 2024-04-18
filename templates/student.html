@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Bid</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='student_style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Submit Your Bid</h1>
+        <form action="/submit_bid" method="post">
+            <label for="power_plant_name">Power Plant Name:</label>
+            <input type="text" id="power_plant_name" name="power_plant_name" required value="Power Plant 1">
+            <label for="bid_power">Bid Power (MW):</label>
+            <input type="number" id="bid_power" name="bid_power" required value="1000">
+            <label for="bid_price">Bid Price (€/MWh):</label>
+            <input type="number" id="bid_price" name="bid_price" required>
+            <input type="submit" value="Submit Bid">
+        </form>
+        {% if session['submitted_bid'] %}
+        <h2>Your Submitted Bid</h2>
+        <p>Power Plant Name: {{ session['submitted_bid']['power_plant_name'] }}</p>
+        <p>Bid Power: {{ session['submitted_bid']['bid_power'] }}</p>
+        <p>Bid Price: {{ session['submitted_bid']['bid_price'] }}</p>
+    {% endif %}
+    </div>
+</body>
+</html>
