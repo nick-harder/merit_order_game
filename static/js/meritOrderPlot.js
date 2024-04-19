@@ -1,31 +1,57 @@
 document.addEventListener("DOMContentLoaded", function(event) {
-    // Use the global variables directly
-    // Initialize arrays to hold cumulative power and prices
-    var cumulativePower = [0]; // Start from zero power
-    var prices = [sortedBids[0].bid_price]; // Start with the price of the first bid
-    var totalPower = 0;
+    // Initialize arrays for sell and buy types
+    var cumulativePowerSell = [0];
+    var pricesSell = [0];
+    var totalPowerSell = 0;
 
-    // Calculate cumulative power and corresponding prices
-    sortedBids.forEach(bid => {
-        totalPower += bid.bid_power;
-        cumulativePower.push(totalPower);
-        prices.push(bid.bid_price);
+    var cumulativePowerBuy = [0];
+    var pricesBuy = [0];
+    var totalPowerBuy = 0;
+
+    // Filter and process sell bids
+    var sellBids = submittedBids.filter(bid => bid.bid_type === 'sell').sort((a, b) => a.bid_price - b.bid_price);
+    sellBids.forEach(bid => {
+        totalPowerSell += bid.bid_power;
+        cumulativePowerSell.push(totalPowerSell);
+        pricesSell.push(bid.bid_price);
     });
 
-    var trace1 = {
-        x: cumulativePower,
-        y: prices,
+    // Filter and process buy bids in descending order by price
+    var buyBids = submittedBids.filter(bid => bid.bid_type === 'buy').sort((a, b) => b.bid_price - a.bid_price);
+    buyBids.forEach(bid => {
+        totalPowerBuy += bid.bid_power;
+        cumulativePowerBuy.push(totalPowerBuy);
+        pricesBuy.push(bid.bid_price);
+    });
+
+    // Create traces for sell and buy bids
+    var traceSell = {
+        x: cumulativePowerSell,
+        y: pricesSell,
         type: 'scatter',
         mode: 'lines+markers',
-        line: {shape: 'vh'},  // Set the line shape to horizontal-then-vertical
-        name: 'Supply Curve'
+        line: { shape: 'vh' },
+        name: 'Sell Bids'
     };
 
-    var trace2 = {
+    var traceBuy = {
+        x: cumulativePowerBuy,
+        y: pricesBuy,
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: { shape: 'vh' },
+        name: 'Buy Bids'
+    };
+    
+    var traceDemand = {
         x: [demandLevel, demandLevel],
-        y: [0, marketClearingPrice],
+        y: [0, marketClearingPrice],  // Adjust to the market clearing price
         type: 'lines',
-        name: 'Demand Level'
+        name: 'Market Clearing Level',
+        line: {
+            dash: 'dot',  // Set the line style to dotted
+            width: 2      // Optional: adjust the line width if needed
+        }
     };
 
     var layout = {
@@ -35,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         showlegend: true
     };
 
-    var data = [trace1, trace2];
+    var data = [traceSell, traceBuy, traceDemand];
 
     Plotly.newPlot('plot', data, layout);
 

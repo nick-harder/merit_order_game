@@ -13,29 +13,45 @@
         <div class="left-column">
             <h2>Set Demand Level</h2>
             <form action="/set_demand" method="post">
-                <label for="demand_level">Demand Level:</label>
-                <input type="number" id="demand_level" name="demand_level" required>
+                <label for="inelastic_demand_level">Inelastic Demand [MW]:</label>
+                <input type="number" id="inelastic_demand_level" name="inelastic_demand_level" required>
                 <input type="submit" value="Set Demand Level">
             </form>
-            <h2>Demand Level: {{ demand_level }}</h2>
+            <h2>Demand Level: {{ inelastic_demand_level }}</h2>
+        </div>
+        <div class="middle-column">
+            <h2>Set VRE Level</h2>
+            <form action="/set_vre" method="post">
+                <label for="vre_level">VRE Generation [MW]:</label>
+                <input type="number" id="vre_level" name="vre_level" required>
+                <input type="submit" value="Set VRE Level">
+            </form>
+            <h2>VRE Level: {{ vre_level }}</h2>
         </div>
         <div class="right-column">
             <h2>All Bids</h2>
-            <table>
-                <tr>
-                    <th>Power Plant Name</th>
-                    <th>Bid Power [MW]</th>
-                    <th>Bid Price [€/MWh]</th>
-                </tr>
-                {% for bid in bids %}
-                <tr>
-                    <td>{{ bid['power_plant_name'] }}</td>
-                    <td>{{ bid['bid_power'] }}</td>
-                    <td>{{ bid['bid_price'] }}</td>
-                </tr>
-                {% endfor %}
-            </table>
+            <div class="scrollable-table">
+                <table>
+                    <tr>
+                        <th>Unit Name</th>
+                        <th>Bid Power [MW]</th>
+                        <th>Bid Price [€/MWh]</th>
+                        <th>Bid Type</th>
+                    </tr>
+                    {% for bid in bids %}
+                    <tr>
+                        <td>{{ bid['power_plant_name'] }}</td>
+                        <td>{{ bid['bid_power'] }}</td>
+                        <td>{{ bid['bid_price'] }}</td>
+                        <td>{{ bid['bid_type'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
             <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <form action="/reload_bids" method="post">
+                    <input type="submit" value="Reload Bids">
+                </form>
                 <form action="/clear_bids" method="post">
                     <input type="submit" value="Clear Bids">
                 </form>
@@ -54,8 +70,8 @@
     </div>
 
     <script>
-        {% if sorted_bids %}
-            var sortedBids = {{ sorted_bids | tojson }};
+        {% if submitted_bids %}
+            var submittedBids = {{ submitted_bids | tojson }};
             var demandLevel = {{ demand_level }};
             var marketClearingPrice = {{ market_clearing_price | default('Not Available') }};
         {% endif %}

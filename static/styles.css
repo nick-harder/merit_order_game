@@ -7,15 +7,36 @@ body {
 }
 .container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr; /* Updated to accommodate three columns */
     grid-gap: 20px;
 }
-.left-column, .right-column {
+
+.left-column, .middle-column { /* Corrected the selector */
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
+.scrollable-table {
+    max-height: 300px; /* Adjust the height as needed */
+    overflow-y: auto; /* Enables vertical scrolling */
+    border: 1px solid #ccc; /* Optional, adds a border around the scrollable area */
+    margin-bottom: 20px; /* Provides spacing below the table */
+}
+
+.right-column table {
+    width: 100%; /* Ensures the table uses the full width of its container */
+    border-collapse: collapse; /* Optional, for better table border handling */
+}
+
+.right-column th, .right-column td {
+    border: 1px solid #ddd; /* Optional, adds borders to cells */
+    padding: 8px; /* Adjust padding for better cell spacing */
+    text-align: left; /* Adjust text alignment as needed */
+}
+
+
 .full-width {
     grid-column: 1 / -1;
     background: white;
