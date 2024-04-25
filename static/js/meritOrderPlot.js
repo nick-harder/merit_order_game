@@ -1,15 +1,20 @@
 document.addEventListener("DOMContentLoaded", function(event) {
     // Initialize arrays for sell and buy types
-    var cumulativePowerSell = [0];
-    var pricesSell = [0];
+    var cumulativePowerSell = [];
+    var pricesSell = [];
     var totalPowerSell = 0;
 
-    var cumulativePowerBuy = [0];
-    var pricesBuy = [0];
+    var cumulativePowerBuy = [];
+    var pricesBuy = [];
     var totalPowerBuy = 0;
 
     // Filter and process sell bids
     var sellBids = submittedBids.filter(bid => bid.bid_type === 'sell').sort((a, b) => a.bid_price - b.bid_price);
+    if (sellBids.length > 0) {
+        // Initialize with the first bid's price and power at zero
+        cumulativePowerSell.push(0);
+        pricesSell.push(sellBids[0].bid_price);
+    }
     sellBids.forEach(bid => {
         totalPowerSell += bid.bid_power;
         cumulativePowerSell.push(totalPowerSell);
@@ -18,6 +23,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     // Filter and process buy bids in descending order by price
     var buyBids = submittedBids.filter(bid => bid.bid_type === 'buy').sort((a, b) => b.bid_price - a.bid_price);
+    if (buyBids.length > 0) {
+        // Initialize with the first bid's price and power at zero
+        cumulativePowerBuy.push(0);
+        pricesBuy.push(buyBids[0].bid_price);
+    }
     buyBids.forEach(bid => {
         totalPowerBuy += bid.bid_power;
         cumulativePowerBuy.push(totalPowerBuy);
@@ -42,17 +52,26 @@ document.addEventListener("DOMContentLoaded", function(event) {
         line: { shape: 'vh' },
         name: 'Buy Bids'
     };
+
+    var data = [traceSell, traceBuy];
     
-    var traceDemand = {
-        x: [demandLevel, demandLevel],
-        y: [0, marketClearingPrice],  // Adjust to the market clearing price
-        type: 'lines',
-        name: 'Market Clearing Level',
-        line: {
-            dash: 'dot',  // Set the line style to dotted
-            width: 2      // Optional: adjust the line width if needed
-        }
-    };
+    // Check if market clearing price is provided and not set to "Not Available"
+    if (marketClearingPrice && marketClearingPrice !== 'Not Available') {
+        var traceDemand = {
+            x: [demandLevel, demandLevel],
+            y: [0, marketClearingPrice],
+            type: 'lines',
+            name: 'Market Clearing Level',
+            line: {
+                dash: 'dot',
+                width: 2
+            }
+        };
+        data.push(traceDemand);
+
+        // Update the market clearing price display
+        document.getElementById('marketClearingPrice').textContent = 'Market Clearing Price: ' + marketClearingPrice + ' €/MWh';
+    }
 
     var layout = {
         title: 'Merit Order Curve',
@@ -61,10 +80,5 @@ document.addEventListener("DOMContentLoaded", function(event) {
         showlegend: true
     };
 
-    var data = [traceSell, traceBuy, traceDemand];
-
     Plotly.newPlot('plot', data, layout);
-
-    // Update the market clearing price display
-    document.getElementById('marketClearingPrice').textContent = 'Market Clearing Price: ' + marketClearingPrice + ' €/MWh';
 });

@@ -1,0 +1,21 @@
+name,technology,capacity,fuel_type,variable_cost
+Atomica,Nuclear,1000,Uranium,30
+Coal King,Hard Coal,800,Coal,40
+GasGen,Gas,600,Natural Gas,50
+ReactorX,Nuclear,1200,Uranium,35
+CleanCoal,Hard Coal,500,Coal,45
+Spark Energy,Gas,300,Natural Gas,55
+Fusion Future,Nuclear,1500,Uranium,32
+Black Diamond,Hard Coal,700,Coal,42
+Blue Flame,Gas,400,Natural Gas,48
+Uranium Power,Nuclear,1100,Uranium,33
+Ember Energy,Hard Coal,600,Coal,47
+GasWorks,Gas,350,Natural Gas,52
+Plutonium Peak,Nuclear,1300,Uranium,31
+Coal Crest,Hard Coal,550,Coal,43
+Sun Gas,Gas,450,Natural Gas,46
+Neutron Nexus,Nuclear,900,Uranium,36
+Carbon Crusher,Hard Coal,750,Coal,41
+Blaze Bright,Gas,250,Natural Gas,60
+Fusion Fields,Nuclear,1400,Uranium,34
+Coal Canyon,Hard Coal,650,Coal,44

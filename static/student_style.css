@@ -5,23 +5,28 @@ body {
     padding: 20px;
     color: #333;
 }
+
 .container {
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
 h1 {
     color: #0056b3;
 }
+
 form {
     margin-top: 20px;
 }
+
 label {
     display: block;
     margin-bottom: 10px;
     color: #666;
 }
+
 input[type="text"],
 input[type="number"],
 input[type="submit"] {
@@ -33,12 +38,38 @@ input[type="submit"] {
     border-radius: 4px;
     border: 1px solid #ccc;
 }
+
 input[type="submit"] {
     background-color: #28a745;
     color: white;
     border: none;
     cursor: pointer;
 }
+
 input[type="submit"]:hover {
     background-color: #218838;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+input[type="radio"] {
+    margin-right: 5px;
+}
+
+.radio-group {
+    margin: 10px 0;
 }

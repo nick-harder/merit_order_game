@@ -38,14 +38,14 @@
                         <th>Bid Price [€/MWh]</th>
                         <th>Bid Type</th>
                     </tr>
-                    {% for bid in bids %}
+                    {% for power_plant_name, bid_info in bids.items() %}
                     <tr>
-                        <td>{{ bid['power_plant_name'] }}</td>
-                        <td>{{ bid['bid_power'] }}</td>
-                        <td>{{ bid['bid_price'] }}</td>
-                        <td>{{ bid['bid_type'] }}</td>
+                        <td>{{ power_plant_name }}</td>
+                        <td>{{ bid_info['bid_power'] }}</td>
+                        <td>{{ bid_info['bid_price'] }}</td>
+                        <td>{{ bid_info['bid_type'] }}</td>
                     </tr>
-                    {% endfor %}
+                    {% endfor %}                    
                 </table>
             </div>
             <div style="display: flex; gap: 10px; margin-top: 10px;">
@@ -59,23 +59,24 @@
         </div>
     </div>
     <div class="full-width">
-        <h2>Compute Market Clearing Price</h2>
+        <h2>Merit Order Curve</h2>
+        <!-- Plot container -->
+        <div id="plot" style="width: 100%; height: 500px;"></div>
         <form action="/compute_price" method="post">
-            <input type="submit" value="Compute Market Clearing Price">
+            <input type="submit" name="action" value="Compute Market Clearing Price">
         </form>
         <!-- Market Clearing Price Display -->
         <p id="marketClearingPrice" style="text-align: center; font-size: 20px;"></p>
-        <!-- Plot container -->
-        <div id="plot" style="width: 100%; height: 500px;"></div>
     </div>
-
+    
     <script>
         {% if submitted_bids %}
             var submittedBids = {{ submitted_bids | tojson }};
             var demandLevel = {{ demand_level }};
-            var marketClearingPrice = {{ market_clearing_price | default('Not Available') }};
+            var marketClearingPrice = {{ market_clearing_price }};
         {% endif %}
+
     </script>
     <script src="{{ url_for('static', filename='js/meritOrderPlot.js') }}"></script>
-</body>
+    </body>
 </html>
