@@ -74,7 +74,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
     var layout = {
-        title: 'Merit Order Curve',
         xaxis: { title: 'Cumulative Power (MW)' },
         yaxis: { title: 'Bid Price (€/MWh)' },
         showlegend: true
