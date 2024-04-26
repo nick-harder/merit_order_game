@@ -28,9 +28,18 @@ assigned_power_plants = []
 
 @app.route("/")
 def index():
-    # Teacher's view
     return render_template(
         "index.html",
+    )
+
+
+@app.route("/teacher")
+def teacher_view():
+    if not is_logged_in():
+        return redirect(url_for("login"))
+    # Teacher's view
+    return render_template(
+        "teacher.html",
         bids=bid.get_bids(),
         inelastic_demand_level=teacher.demand_level,
         vre_level=teacher.vre_level,
@@ -38,7 +47,7 @@ def index():
 
 
 @app.route("/student")
-def student():
+def student_view():
     if "assigned_power_plant" in session:
         assigned_power_plant = session["assigned_power_plant"]
     else:
@@ -76,7 +85,7 @@ def submit_bid():
         "bid_type": bid_type,
     }
 
-    return redirect(url_for("student"))
+    return redirect(url_for("student_view"))
 
 
 @app.route("/set_demand", methods=["POST"])
@@ -104,7 +113,7 @@ def reload_bids():
     bids_as_list = bid.bids_to_list()
 
     return render_template(
-        "index.html",
+        "teacher.html",
         bids=bid.get_bids(),
         demand_level=0,
         market_clearing_price=0,
@@ -122,7 +131,7 @@ def compute_price():
     )
 
     return render_template(
-        "index.html",
+        "teacher.html",
         bids=bid.get_bids(),
         demand_level=accepted_buy,
         market_clearing_price=market_clearing_price,
@@ -136,7 +145,25 @@ def compute_price():
 def clear_bids():
     bid.clear_bids()
     teacher.reset()
-    return redirect(url_for("index"))
+    return redirect(url_for("teacher_view"))
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        # Simple check, replace with your actual validation logic
+        if username == "teacher" and password == "CiG_4005":
+            session["user"] = "teacher"
+            return redirect(url_for("teacher_view"))
+        else:
+            return "Invalid username or password"
+    return render_template("login.html")
+
+
+def is_logged_in():
+    return "user" in session and session["user"] == "teacher"
 
 
 if __name__ == "__main__":
