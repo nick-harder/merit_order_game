@@ -9,37 +9,17 @@
 </head>
 <body>
     <h1>Merit Order Market Clearing</h1>
-    <div class="full-width">
-        <h2>Merit Order Curve</h2>
-        <!-- Plot container -->
-        <div id="plot" style="width: 100%; height: 500px;"></div>
-        <form action="/compute_price" method="post">
-            <input type="submit" name="action" value="Compute Market Clearing Price">
-        </form>
-        <!-- Market Clearing Price Display -->
-        <p id="marketClearingPrice" style="text-align: center; font-size: 20px;"></p>
-    </div>
 
-    <div class="container">
-        <div class="left-column">
-            <h2>Set Demand Level</h2>
-            <form action="/set_demand" method="post">
-                <label for="inelastic_demand_level">Inelastic Demand [MW]:</label>
-                <input type="number" id="inelastic_demand_level" name="inelastic_demand_level" required>
-                <input type="submit" value="Set Demand Level">
+    <div class="container" style="display: flex;">
+        <div class="plot-column" style="flex: 70%;">
+            <h2>Merit Order Curve</h2>
+            <div id="plot" style="width: 100%; height: 500px;"></div>
+            <form action="/compute_price" method="post">
+                <input type="submit" name="action" value="Compute Market Clearing Price">
             </form>
-            <h2>Demand Level: {{ inelastic_demand_level }}</h2>
+            <p id="marketClearingPrice" style="text-align: center; font-size: 20px;"></p>
         </div>
-        <div class="middle-column">
-            <h2>Set VRE Level</h2>
-            <form action="/set_vre" method="post">
-                <label for="vre_level">VRE Generation [MW]:</label>
-                <input type="number" id="vre_level" name="vre_level" required>
-                <input type="submit" value="Set VRE Level">
-            </form>
-            <h2>VRE Level: {{ vre_level }}</h2>
-        </div>
-        <div class="right-column">
+        <div class="right-column" style="flex: 30%;">
             <h2>All Bids</h2>
             <div class="scrollable-table">
                 <table>
@@ -56,10 +36,10 @@
                         <td>{{ bid_info['bid_price'] }}</td>
                         <td>{{ bid_info['bid_type'] }}</td>
                     </tr>
-                    {% endfor %}                    
+                    {% endfor %}
                 </table>
             </div>
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
+            <div style="display: flex; gap: 10px; margin-top: 10px; margin-bottom: auto;">
                 <form action="/reload_bids" method="post">
                     <input type="submit" value="Reload Bids">
                 </form>
@@ -67,17 +47,37 @@
                     <input type="submit" value="Clear Bids">
                 </form>
             </div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <div>
+                    <h2>Set Demand</h2>
+                    <form action="/set_demand" method="post">
+                        <label for="inelastic_demand_level">Inelastic Demand [MW]:</label>
+                        <input type="number" id="inelastic_demand_level" name="inelastic_demand_level" required value="{{ inelastic_demand_level }}">
+                        <input type="submit" value="Set Demand Level">
+                    </form>
+                </div>
+                <div style="margin-left: 20px;"> <!-- Added margin to create space -->
+                    <h2>Set VRE</h2>
+                    <form action="/set_vre" method="post">
+                        <label for="vre_level">VRE Generation [MW]:</label>
+                        <input type="number" id="vre_level" name="vre_level" required value="{{ vre_level }}">
+                        <input type="submit" value="Set VRE Level">
+                    </form>
+                </div>
+            </div>                    <!-- <h2>VRE Level: {{ vre_level }}</h2> -->
         </div>
     </div>
-    
+
     <script>
         {% if submitted_bids %}
             var submittedBids = {{ submitted_bids | tojson }};
             var demandLevel = {{ demand_level }};
             var marketClearingPrice = {{ market_clearing_price }};
         {% endif %}
+        </script>
 
-    </script>
-    <script src="{{ url_for('static', filename='js/meritOrderPlot.js') }}"></script>
-    </body>
+        <script
+            src="{{ url_for('static', filename='js/meritOrderPlot.js') }}">
+        </script>
+</body>
 </html>

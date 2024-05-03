@@ -6,7 +6,7 @@ body {
     color: #333;
 }
 .container {
-    display: grid;
+    display: flex;
     grid-template-columns: 1fr 1fr 1fr; /* Updated to accommodate three columns */
     grid-gap: 20px;
 }
@@ -36,8 +36,14 @@ body {
     text-align: left; /* Adjust text alignment as needed */
 }
 
+.merit-order-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Updated to accommodate three columns */
+    grid-gap: 20px;
+}
 
-.full-width {
+.plot-column {
+
     grid-column: 1 / -1;
     background: white;
     padding: 20px;
@@ -90,6 +96,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+
 h1 {
     color: #0056b3;
 }

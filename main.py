@@ -67,6 +67,15 @@ def student_view():
         )[0]
         assigned_power_plants.append(assigned_power_plant["name"])
         session["assigned_power_plant"] = assigned_power_plant
+
+    if "submitted_bid" not in session:
+        session["submitted_bid"] = {
+            "power_plant_name": session["assigned_power_plant"]["name"],
+            "bid_power": 0,
+            "bid_price": 0,
+            "bid_type": "sell",
+        }
+
     # Student's bid submission view
     return render_template("student.html", assigned_power_plant=assigned_power_plant)
 
