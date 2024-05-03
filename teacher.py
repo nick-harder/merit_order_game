@@ -7,22 +7,22 @@ from copy import deepcopy
 
 class Teacher:
     def __init__(self):
-        self.demand_level = None
-        self.vre_level = None
-
-    def set_demand(self, demand_level):
-        self.demand_level = demand_level
-
-    def set_vre(self, vre_level):
-        self.vre_level = vre_level
+        self.demand_level = 0
+        self.vre_level = 0
+        self.co2_price = 0
 
     def reset(self):
         self.demand_level = 0
         self.vre_level = 0
+        self.co2_price = 0
 
-    def compute_price(self, submitted_bids):
+    def compute_price(self, submitted_bids, power_plants):
         # make a copy of the bids list to avoid modifying the original list
         bids = deepcopy(submitted_bids)
+
+        power_plants["marginal_cost"] = power_plants.apply(
+            lambda x: self.calculate_marginal_cost(x), axis=1
+        )
 
         sell_bids = [bid for bid in bids if bid["bid_type"] == "sell"]
         buy_bids = [bid for bid in bids if bid["bid_type"] == "buy"]
@@ -50,9 +50,14 @@ class Teacher:
 
             if sell_bid["bid_price"] <= buy_bid["bid_price"]:
                 # There is a match
-                matched_power = min(buy_bid["bid_power"], sell_bid["bid_power"])
-                buy_bid["bid_power"] -= matched_power
-                sell_bid["bid_power"] -= matched_power
+                matched_power = min(
+                    buy_bid["remaining_volume"], sell_bid["remaining_volume"]
+                )
+                buy_bid["remaining_volume"] -= matched_power
+                sell_bid["remaining_volume"] -= matched_power
+
+                buy_bid["accepted_volume"] += matched_power
+                sell_bid["accepted_volume"] += matched_power
 
                 accepted_buy += matched_power
                 accepted_sell += matched_power
@@ -61,14 +66,45 @@ class Teacher:
                 market_clearing_price = sell_bid["bid_price"]
 
                 # Move to next sell bid if this one is fully matched
-                if sell_bid["bid_power"] == 0:
+                if sell_bid["remaining_volume"] == 0:
                     j += 1
 
                 # Move to next buy bid if this one is fully matched
-                if buy_bid["bid_power"] == 0:
+                if buy_bid["remaining_volume"] == 0:
                     i += 1
             else:
                 # No more matches possible, move to next buy bid
                 i += 1
 
-        return market_clearing_price, accepted_buy, accepted_sell
+        for bid in bids:
+            if bid["bid_type"] == "sell":
+                if bid["name"] == "VRE generation":
+                    marginal_cost = 0
+                elif bid["name"] in power_plants.index:
+                    marginal_cost = power_plants.loc[bid["name"], "marginal_cost"]
+
+                print(marginal_cost)
+
+                bid["profit"] = (
+                    (market_clearing_price - marginal_cost)
+                    * bid["accepted_volume"]
+                    / 1000
+                )
+                # round to full value
+                bid["profit"] = round(bid["profit"], 0)
+            else:
+                bid["profit"] = -market_clearing_price * bid["accepted_volume"] / 1000
+                # round to full value
+                bid["profit"] = round(bid["profit"], 0)
+
+        return market_clearing_price, accepted_buy, bids
+
+    def calculate_marginal_cost(self, power_plant):
+        efficiency = power_plant["efficiency"] / 100
+        cost = (
+            power_plant["fuel_cost"] / efficiency
+            + self.co2_price * power_plant["ef"] / efficiency
+            + power_plant["variable_cost"]
+        )
+
+        return cost

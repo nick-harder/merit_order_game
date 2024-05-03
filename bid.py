@@ -7,8 +7,8 @@ class Bid:
     def __init__(self):
         self.bids = {}
 
-    def add_bid(self, power_plant_name, bid_power, bid_price, bid_type):
-        self.bids[power_plant_name] = {
+    def add_bid(self, name, bid_power, bid_price, bid_type):
+        self.bids[name] = {
             "bid_power": bid_power,
             "bid_price": bid_price,
             "bid_type": bid_type,
@@ -23,10 +23,13 @@ class Bid:
     def bids_to_list(self):
         return [
             {
-                "power_plant_name": power_plant_name,
+                "name": name,
                 "bid_power": bid["bid_power"],
                 "bid_price": bid["bid_price"],
                 "bid_type": bid["bid_type"],
+                "accepted_volume": 0,
+                "remaining_volume": bid["bid_power"],
+                "profit": 0,
             }
-            for power_plant_name, bid in self.bids.items()
+            for name, bid in self.bids.items()
         ]

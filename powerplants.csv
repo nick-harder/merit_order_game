@@ -1,21 +1,21 @@
 name,technology,capacity,variable_cost,fuel_cost,efficiency,ef
-Atomica,Nuclear,1000,3,2,32,0.1
+Atomica,Nuclear,1000,3,2,32,0
 Coal King,Hard Coal,800,4,13,38,0.4
 GasGen,Gas,600,5,37,47,0.3
-ReactorX,Nuclear,1200,3.5,1,34,0.1
+ReactorX,Nuclear,1200,3.5,1,34,0
 CleanCoal,Hard Coal,500,4.5,8,42,0.3
 Spark Energy,Gas,300,5.5,38,36,0.2
-Fusion Future,Nuclear,1500,3.2,3,28,0.1
+Fusion Future,Nuclear,1500,3.2,3,28,0
 Black Diamond,Hard Coal,700,4.2,11,41,0.4
 Blue Flame,Gas,400,4.8,37,45,0.2
-Uranium Power,Nuclear,1100,3.3,3,33,0.1
+Uranium Power,Nuclear,1100,3.3,3,33,0
 Ember Energy,Hard Coal,600,4.7,10,9,0.4
 GasWorks,Gas,350,5.2,39,46,0.2
-Plutonium Peak,Nuclear,1300,3.1,2,29,0.1
+Plutonium Peak,Nuclear,1300,3.1,2,29,0
 Coal Crest,Hard Coal,550,4.3,7,8,0.4
 Sun Gas,Gas,450,4.6,41,43,0.2
-Neutron Nexus,Nuclear,900,3.6,2,33,0.1
+Neutron Nexus,Nuclear,900,3.6,2,33,0
 Carbon Crusher,Hard Coal,750,4.1,8,44,0.4
 Blaze Bright,Gas,250,6.0,40,37,0.2
-Fusion Fields,Nuclear,1400,3.4,2,31,0.1
+Fusion Fields,Nuclear,1400,3.4,2,31,0
 Coal Canyon,Hard Coal,650,4.4,11,9,0.4

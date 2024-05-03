@@ -19,21 +19,21 @@
                 <td>{{ assigned_power_plant['technology'] }}</td>
             </tr>
             <tr>
-                <th>Capacity [MW]</th>
+                <th>Capacity (MW)</th>
                 <td>{{ assigned_power_plant['capacity'] }}</td>
             </tr>
             <tr>
-                <th>Thermal conversion efficiency [%]</th>
+                <th>Thermal conversion efficiency (% MWh<sub>el</sub>/MW<sub>th</sub>)</th>
                 <td>{{ assigned_power_plant['efficiency'] }}</td>
             <tr>
-                <th>Fuel cost [EUR/t]</th>
+                <th>Fuel cost (€/MWh<sub>th</sub>)</th>
                 <td>{{ assigned_power_plant['fuel_cost'] }}</td>
             </tr>
             <tr>
-                <th>Fuel emission factor [t<sub>CO<sub>2</sub></sub>/MW<sub>th</sub>]</th>
+                <th>Fuel emission factor (t<sub>CO<sub>2</sub></sub>/MW<sub>th</sub>)</th>
                 <td>{{ assigned_power_plant['ef'] }}</td>
             <tr>
-                <th>Variable operating cost [EUR/MWh<sub>el</sub>]</th>
+                <th>Variable operating cost (€/MWh<sub>el</sub>)</th>
                 <td>{{ assigned_power_plant['variable_cost'] }}</td>
             </tr>
             </table>
@@ -58,8 +58,8 @@
             </form>
         {% if session['submitted_bid'] %}
         <h2>Your Submitted Bid</h2>
-        <p>Bid Power: {{ session['submitted_bid']['bid_power'] }}</p>
-        <p>Bid Price: {{ session['submitted_bid']['bid_price'] }}</p>
+        <p>Bid Volume (MW): {{ session['submitted_bid']['bid_power'] }}</p>
+        <p>Bid Price (€/MWh): {{ session['submitted_bid']['bid_price'] }}</p>
         <p>Bid Type: {{ session['submitted_bid']['bid_type'] }}</p>
     {% endif %}
     </div>

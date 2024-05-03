@@ -74,8 +74,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }
 
     var layout = {
-        xaxis: { title: 'Cumulative Power (MW)' },
-        yaxis: { title: 'Bid Price (€/MWh)' },
+        xaxis: { title: 'Cumulative Power (MW)', range: [0, Math.max(totalPowerSell, totalPowerBuy)+100] },
+        yaxis: { title: 'Bid Price (€/MWh)', range: [-5, Math.max(...pricesSell, ...pricesBuy)+100] },
         showlegend: true
     };
 
