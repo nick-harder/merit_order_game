@@ -19,37 +19,43 @@
                 <td>{{ assigned_power_plant['technology'] }}</td>
             </tr>
             <tr>
-                <th>Capacity</th>
+                <th>Capacity [MW]</th>
                 <td>{{ assigned_power_plant['capacity'] }}</td>
             </tr>
             <tr>
-                <th>Fuel Type</th>
-                <td>{{ assigned_power_plant['fuel_type'] }}</td>
+                <th>Thermal conversion efficiency [%]</th>
+                <td>{{ assigned_power_plant['efficiency'] }}</td>
+            <tr>
+                <th>Fuel cost [EUR/t]</th>
+                <td>{{ assigned_power_plant['fuel_cost'] }}</td>
             </tr>
             <tr>
-                <th>Variable Costs</th>
+                <th>Fuel emission factor [t<sub>CO<sub>2</sub></sub>/MW<sub>th</sub>]</th>
+                <td>{{ assigned_power_plant['ef'] }}</td>
+            <tr>
+                <th>Variable operating cost [EUR/MWh<sub>el</sub>]</th>
                 <td>{{ assigned_power_plant['variable_cost'] }}</td>
             </tr>
             </table>
             <form action="/submit_bid" method="post">
-            <label for="bid_power">Bid Volume (MW):</label>
-            <input type="number" id="bid_power" name="bid_power" required value="1000">
-
-            <label for="bid_price">Bid Price (€/MWh):</label>
-            <input type="number" id="bid_price" name="bid_price" required>
-
-            <label for="bid_type">Bid Type:</label>
-            <div style="display: inline-block;">
-                <input type="radio" id="buy" name="bid_type" value="buy">
-                <label for="buy">Buy</label>
-            </div>
+                <label for="bid_power">Bid Volume (MW):</label>
+                <input type="number" id="bid_power" name="bid_power" value="{{ session['submitted_bid']['bid_power'] }}" required>
             
-            <div style="display: inline-block;">
-                <input type="radio" id="sell" name="bid_type" value="sell" checked>
-                <label for="sell">Sell</label>
-            </div>
-            <input type="submit" value="Submit Bid">
-        </form>
+                <label for="bid_price">Bid Price (€/MWh):</label>
+                <input type="number" id="bid_price" name="bid_price" value="{{ session['submitted_bid']['bid_price'] }}" required>
+            
+                <label for="bid_type">Bid Type:</label>
+                <div style="display: inline-block;">
+                    <input type="radio" id="buy" name="bid_type" value="buy" {% if session['submitted_bid']['bid_type'] == 'buy' %} checked {% endif %}>
+                    <label for="buy">Buy</label>
+                </div>
+                
+                <div style="display: inline-block;">
+                    <input type="radio" id="sell" name="bid_type" value="sell" {% if session['submitted_bid']['bid_type'] == 'sell' %} checked {% endif %}>
+                    <label for="sell">Sell</label>
+                </div>
+                <input type="submit" value="Submit Bid">
+            </form>
         {% if session['submitted_bid'] %}
         <h2>Your Submitted Bid</h2>
         <p>Bid Power: {{ session['submitted_bid']['bid_power'] }}</p>

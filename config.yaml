@@ -1,0 +1,5 @@
+randomize_power_plants: false
+load_storages: false
+secret_key: "merit_oder_game_v2"
+clear_sessions: true
+teacher_password: "CiG_4005"

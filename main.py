@@ -3,20 +3,22 @@ import pandas as pd
 from bid import Bid
 from teacher import Teacher
 import os
+import yaml
+
+config = yaml.safe_load(open("config.yaml"))
 
 app = Flask(__name__)
-randomize_power_plants = False
-if randomize_power_plants:
+
+if config["randomize_power_plants"]:
     app.secret_key = os.urandom(24)
 else:
-    app.secret_key = "merit_order_game"
+    app.secret_key = config["secret_key"]
 
 
 bid = Bid()
 teacher = Teacher()
 
-load_storages = False
-if load_storages:
+if config["load_storages"]:
     power_plants = pd.read_csv("powerplants_with_storages.csv")
 else:
     power_plants = pd.read_csv("powerplants.csv")
@@ -25,9 +27,12 @@ else:
 power_plants = power_plants.sample(frac=1).reset_index(drop=True)
 assigned_power_plants = []
 
-
 @app.route("/")
 def index():
+    if config["clear_sessions"]:
+        # Call the function to clear all sessions
+        clear_all_sessions()
+
     return render_template(
         "index.html",
     )
@@ -62,7 +67,6 @@ def student_view():
         )[0]
         assigned_power_plants.append(assigned_power_plant["name"])
         session["assigned_power_plant"] = assigned_power_plant
-
     # Student's bid submission view
     return render_template("student.html", assigned_power_plant=assigned_power_plant)
 
@@ -154,7 +158,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         # Simple check, replace with your actual validation logic
-        if username == "teacher" and password == "CiG_4005":
+        if username == "teacher" and password == config["teacher_password"]:
             session["user"] = "teacher"
             return redirect(url_for("teacher_view"))
         else:
@@ -165,6 +169,10 @@ def login():
 def is_logged_in():
     return "user" in session and session["user"] == "teacher"
 
+def clear_all_sessions():
+    session_keys = list(session.keys())  # Get a list of all keys in the session
+    for key in session_keys:
+        session.pop(key)  # Remove each key from the session
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)
