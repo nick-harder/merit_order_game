@@ -20,6 +20,8 @@ teacher = Teacher()
 
 if config["load_storages"]:
     power_plants = pd.read_csv("powerplants_with_storages.csv")
+if config["load_demand"]:
+    power_plants = pd.read_csv("powerplants_with_demand.csv")
 else:
     power_plants = pd.read_csv("powerplants.csv")
 
