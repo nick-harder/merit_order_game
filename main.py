@@ -10,11 +10,11 @@ load_storages = os.environ.get('LOAD_STORAGES', 'false').lower() == 'true'
 load_demand = os.environ.get('LOAD_DEMAND', 'false').lower() == 'true'
 clear_sessions = os.environ.get('CLEAR_SESSIONS', 'false').lower() == 'true'
 teacher_password = os.environ.get('TEACHER_PASSWORD', 'CiG_4005')
-secret_key = os.environ.get('SECRET_KEY', 'merit_oder_game_v3')
+secret_key = os.environ.get('SECRET_KEY', 'merit_oder_game_v1')
 
 app = Flask(__name__)
 
-if randomize_power_plants:
+if clear_sessions:
     app.secret_key = os.urandom(24)
 else:
     app.secret_key = secret_key
@@ -33,6 +33,9 @@ else:
 if randomize_power_plants:
     # Shuffle the power plants
     power_plants = power_plants.sample(frac=1).reset_index(drop=True)
+else:
+    # Sort the power plants by name
+    power_plants = power_plants.reset_index(drop=True)
 
 # set name as index
 power_plants.set_index("name", inplace=True)

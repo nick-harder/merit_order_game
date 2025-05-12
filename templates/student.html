@@ -55,6 +55,7 @@
                     <label for="sell">Sell</label>
                 </div>
                 <div id="error-message" style="color: red; display: none;">Bid volume cannot exceed the unit's capacity!</div>
+                <div id="technology-error" style="color: red; display: none;">Only Energy suppliers can submit buy bids!</div>
                 <input type="submit" value="Submit Bid" id="submit-button">
             </form>
 
@@ -63,24 +64,44 @@
                 const bidPowerInput = document.getElementById('bid_power');
                 const submitButton = document.getElementById('submit-button');
                 const errorMessage = document.getElementById('error-message');
+                const technologyError = document.getElementById('technology-error');
                 const maxCapacity = {{ assigned_power_plant['capacity'] }};
+                const technology = "{{ assigned_power_plant['technology'] }}";
+                const buyRadio = document.getElementById('buy');
+                const sellRadio = document.getElementById('sell');
                 
                 // Set the max attribute on the input
                 bidPowerInput.setAttribute('max', maxCapacity);
                 
                 function validateBid() {
                     const bidValue = parseInt(bidPowerInput.value, 10);
+                    let isValid = true;
+                    
+                    // Check capacity
                     if (bidValue > maxCapacity) {
                         errorMessage.style.display = 'block';
-                        return false;
+                        isValid = false;
                     } else {
                         errorMessage.style.display = 'none';
-                        return true;
                     }
+                    
+                    // Check if technology is Energy supplier for buy bids
+                    if (buyRadio.checked && technology !== "Energy supplier") {
+                        technologyError.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        technologyError.style.display = 'none';
+                    }
+                    
+                    return isValid;
                 }
                 
                 // Validate on input change
                 bidPowerInput.addEventListener('input', validateBid);
+                
+                // Validate when bid type changes
+                buyRadio.addEventListener('change', validateBid);
+                sellRadio.addEventListener('change', validateBid);
                 
                 // Validate on form submission
                 const form = document.querySelector('form');

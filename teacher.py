@@ -83,8 +83,6 @@ class Teacher:
                 elif bid["name"] in power_plants.index:
                     marginal_cost = power_plants.loc[bid["name"], "marginal_cost"]
 
-                print(marginal_cost)
-
                 bid["profit"] = (
                     (market_clearing_price - marginal_cost)
                     * bid["accepted_volume"]
