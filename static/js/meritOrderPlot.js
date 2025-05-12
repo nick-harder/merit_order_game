@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     // Check if market clearing price is provided and not set to "Not Available"
     if (marketClearingPrice && marketClearingPrice !== 'Not Available') {
         var traceDemand = {
-            x: [demandLevel, demandLevel],
+            x: [powerLevel, powerLevel],
             y: [0, marketClearingPrice],
             type: 'lines',
             name: 'Market Clearing Level',

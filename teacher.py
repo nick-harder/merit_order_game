@@ -35,12 +35,6 @@ class Teacher:
         accepted_buy = 0
         market_clearing_price = None
 
-        # check if total supply is less than total demand
-        total_supply = sum([bid["bid_power"] for bid in sell_bids])
-        total_demand = sum([bid["bid_power"] for bid in buy_bids])
-        if total_supply < total_demand:
-            return 3000, total_supply, total_supply
-
         i, j = 0, 0
 
         # Iterate to find the market clearing price
@@ -72,6 +66,9 @@ class Teacher:
                 # Move to next buy bid if this one is fully matched
                 if buy_bid["remaining_volume"] == 0:
                     i += 1
+                else:
+                    # Set price to the buy bid price
+                    market_clearing_price = buy_bid["bid_price"]
             else:
                 # No more matches possible, move to next buy bid
                 i += 1
@@ -95,7 +92,8 @@ class Teacher:
                 # round to full value
                 bid["profit"] = round(bid["profit"], 0)
 
-        return market_clearing_price, accepted_buy, bids
+        accepted_volume = min(accepted_buy, accepted_sell)
+        return market_clearing_price, accepted_volume, bids
 
     def calculate_marginal_cost(self, power_plant):
         efficiency = power_plant["efficiency"] / 100

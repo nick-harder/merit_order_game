@@ -164,17 +164,18 @@ def reload_bids():
 @app.route("/compute_price", methods=["POST"])
 def compute_price():
     bids_as_list = bid.bids_to_list()
-    market_clearing_price, accepted_buy, bids_as_list = teacher.compute_price(
+    market_clearing_price, accepted_power, bids_as_list = teacher.compute_price(
         bids_as_list, power_plants
     )
 
     return render_template(
         "teacher.html",
-        demand_level=accepted_buy,
+        power_level=accepted_power,
         market_clearing_price=market_clearing_price,
         submitted_bids=bids_as_list,
         inelastic_demand_level=teacher.demand_level,
         vre_level=teacher.vre_level,
+        co2_price=teacher.co2_price,
     )
 
 

@@ -88,7 +88,8 @@
 
     <script>
         var submittedBids = {{ submitted_bids | tojson }};
-        var demandLevel = {{ inelastic_demand_level|default(0) }};
+        var powerLevel = {{ power_level|default(0) }};
+        var inelasticDemandLevel = {{ inelastic_demand_level|default(0) }};
         var marketClearingPrice = {{ market_clearing_price|default(0) }};
         
         // Check if demand is set for market clearing computation
@@ -98,7 +99,7 @@
             const messageElement = document.createElement('p');
             
             const hasBids = submittedBids && submittedBids.length > 0;
-            const hasDemand = demandLevel > 0;
+            const hasDemand = inelasticDemandLevel > 0;
             
             // Determine which message to show based on missing requirements
             let errorMessage = "";
