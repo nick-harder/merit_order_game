@@ -75,14 +75,43 @@
                         <input type="submit" value="Set Value">
                     </form>
                 </div>
-            </div>                                <!-- <h2>VRE Level: {{ vre_level }}</h2> -->
+            </div>
+            
+            <div class="admin-controls" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #ccc;">
+                <h2>Admin Controls</h2>
+                <form action="{{ url_for('reset_assignments') }}" method="post">
+                  <button type="submit" style="background-color: #ff9800; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer;">🔄 Reset Student Assignments</button>
+                </form>
+            </div>
+            <!-- <h2>VRE Level: {{ vre_level }}</h2> -->
         </div>
     </div>
 
     <script>
         var submittedBids = {{ submitted_bids | tojson }};
-        var demandLevel = {{ demand_level }};
-        var marketClearingPrice = {{ market_clearing_price }};
+        var demandLevel = {{ inelastic_demand_level|default(0) }};
+        var marketClearingPrice = {{ market_clearing_price|default(0) }};
+        
+        // Check if demand is set for market clearing computation
+        document.addEventListener('DOMContentLoaded', function() {
+            const computeButton = document.querySelector('input[value="Compute Market Clearing Price"]');
+            const priceForm = computeButton.closest('form');
+            const messageElement = document.createElement('p');
+            messageElement.textContent = "⚠️ Please set the demand first!";
+            messageElement.style.color = "#d9534f";
+            messageElement.style.fontWeight = "bold";
+            messageElement.style.marginTop = "10px";
+            messageElement.style.display = demandLevel > 0 ? "none" : "block";
+            
+            priceForm.insertAdjacentElement('afterend', messageElement);
+            
+            if (demandLevel <= 0) {
+                computeButton.disabled = true;
+                computeButton.style.opacity = "0.5";
+                computeButton.style.cursor = "not-allowed";
+                computeButton.title = "Set the demand first before computing market clearing price";
+            }
+        });
         </script>
 
         <script
