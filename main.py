@@ -1,46 +1,58 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, abort
 import pandas as pd
 from bid import Bid
 from teacher import Teacher
 import os
-import yaml
 
-config = yaml.safe_load(open("config.yaml"))
+# Replace YAML config with environment variables
+randomize_power_plants = os.environ.get('RANDOMIZE_POWER_PLANTS', 'true').lower() == 'true'
+load_storages = os.environ.get('LOAD_STORAGES', 'false').lower() == 'true'
+load_demand = os.environ.get('LOAD_DEMAND', 'false').lower() == 'true'
+clear_sessions = os.environ.get('CLEAR_SESSIONS', 'false').lower() == 'true'
+teacher_password = os.environ.get('TEACHER_PASSWORD', 'CiG_4005')
+secret_key = os.environ.get('SECRET_KEY', 'merit_oder_game_v1')
 
 app = Flask(__name__)
 
-if config["randomize_power_plants"]:
+if clear_sessions:
     app.secret_key = os.urandom(24)
 else:
-    app.secret_key = config["secret_key"]
-
+    app.secret_key = secret_key
 
 bid = Bid()
 teacher = Teacher()
 
-if config["load_storages"]:
-    power_plants = pd.read_csv("powerplants_with_storages.csv")
-if config["load_demand"]:
-    power_plants = pd.read_csv("powerplants_with_demand.csv")
-else:
-    power_plants = pd.read_csv("powerplants.csv")
+def init_power_plants():
+    # pull in whatever CSV you originally load
+    if load_storages:
+        df = pd.read_csv("powerplants_with_storages.csv")
+    elif load_demand:
+        df = pd.read_csv("powerplants_with_demand.csv")
+    else:
+        df = pd.read_csv("powerplants.csv")
 
-# Shuffle the power plants DataFrame
-power_plants = power_plants.sample(frac=1).reset_index(drop=True)
-# set name as index
-power_plants.set_index("name", inplace=True)
+    # shuffle or keep order
+    if randomize_power_plants:
+        df = df.sample(frac=1).reset_index(drop=True)
+    else:
+        df = df.reset_index(drop=True)
+
+    df.set_index("name", inplace=True)
+    return df
+
+# initialize once on import
+power_plants = init_power_plants()
+
 assigned_power_plants = []
-
 
 @app.route("/")
 def index():
-    if config["clear_sessions"]:
-        # Call the function to clear all sessions
-        clear_all_sessions()
-
-    return render_template(
-        "index.html",
-    )
+    # only clear if clear_sessions is true _and_ we haven't done it for this user yet
+    if clear_sessions and not session.get("_initialized"):
+        session.clear()
+        # mark that we’ve initialized them so we don't clear again
+        session["_initialized"] = True
+    return render_template("index.html")
 
 
 @app.route("/teacher")
@@ -172,6 +184,31 @@ def clear_bids():
     teacher.reset()
     return redirect(url_for("teacher_view"))
 
+@app.route("/reset_assignments", methods=["POST"])
+def reset_assignments():
+    # only the teacher may do this
+    if not is_logged_in():
+        abort(403)
+
+    global assigned_power_plants, power_plants
+
+    # 1) Clear out which plants have been handed out
+    assigned_power_plants.clear()
+
+    # 2) Reload & (re)shuffle the master list
+    power_plants = init_power_plants()
+
+    # 3) Wipe any stored bids
+    bid.clear_bids()
+
+    # 4) Reset teacher’s parameters (demand, VRE, CO₂ price)
+    teacher.reset()
+
+    # 5) Rotate the secret key so every existing session cookie breaks
+    app.secret_key = os.urandom(24)
+
+    return redirect(url_for("teacher_view"))
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -179,13 +216,12 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         # Simple check, replace with your actual validation logic
-        if username == "teacher" and password == config["teacher_password"]:
+        if username == "teacher" and password == teacher_password:
             session["user"] = "teacher"
             return redirect(url_for("teacher_view"))
         else:
             return "Invalid username or password"
     return render_template("login.html")
-
 
 def is_logged_in():
     return "user" in session and session["user"] == "teacher"

@@ -1,1 +1,31 @@
-Flask==1.1.2
+# ┌─────────────── Core App Dependencies ───────────────┐
+Flask>=3.1.0                # your web framework
+gunicorn>=23.0.0            # WSGI server for production
+pandas>=2.0.0               # data handling
+PyYAML>=6.0                 # YAML parsing (was “yaml”)
+python-dotenv>=1.0.0        # load .env config into os.environ
+requests>=2.30.0            # HTTP client
+
+# ┌──────────── Optional Web Utilities ────────────┐
+Flask-Cors>=4.0.0           # enable CORS if you call this from JS
+Whitenoise>=6.4.0           # serve static assets efficiently
+
+# ┌──────────── Database (if you add a DB) ────────────┐
+SQLAlchemy>=2.0.0           # ORM
+psycopg2-binary>=2.9.0      # PostgreSQL driver
+
+# ┌──────────── Session & Auth Helpers ────────────┐
+Flask-Session>=0.4.0        # server-side session support
+Flask-Login>=0.6.0          # simple user-login management
+Flask-WTF>=1.1.0            # form handling + CSRF protection
+
+# ┌────────────── Dev & Testing Tools ──────────────┐
+pytest>=7.0.0               # testing framework
+flake8>=6.0.0               # linting
+black>=23.9.0               # code formatting
+isort>=5.12.0               # import sorting
+pre-commit>=3.4.0           # git hooks for enforcing style
+
+# ┌────────────── Optional Extras ──────────────┐
+# uvicorn>=0.21.1           # if you ever switch to ASGI  
+# fastapi>=0.95.0           # if you add an API micro-framework
