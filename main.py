@@ -3,30 +3,37 @@ import pandas as pd
 from bid import Bid
 from teacher import Teacher
 import os
-import yaml
 
-config = yaml.safe_load(open("config.yaml"))
+# Replace YAML config with environment variables
+randomize_power_plants = os.environ.get('RANDOMIZE_POWER_PLANTS', 'true').lower() == 'true'
+load_storages = os.environ.get('LOAD_STORAGES', 'false').lower() == 'true'
+load_demand = os.environ.get('LOAD_DEMAND', 'false').lower() == 'true'
+clear_sessions = os.environ.get('CLEAR_SESSIONS', 'false').lower() == 'true'
+teacher_password = os.environ.get('TEACHER_PASSWORD', 'CiG_4005')
+secret_key = os.environ.get('SECRET_KEY', 'merit_oder_game_v3')
 
 app = Flask(__name__)
 
-if config["randomize_power_plants"]:
+if randomize_power_plants:
     app.secret_key = os.urandom(24)
 else:
-    app.secret_key = config["secret_key"]
-
+    app.secret_key = secret_key
 
 bid = Bid()
 teacher = Teacher()
 
-if config["load_storages"]:
+if load_storages:
     power_plants = pd.read_csv("powerplants_with_storages.csv")
-if config["load_demand"]:
+elif load_demand:
     power_plants = pd.read_csv("powerplants_with_demand.csv")
 else:
     power_plants = pd.read_csv("powerplants.csv")
 
-# Shuffle the power plants DataFrame
-power_plants = power_plants.sample(frac=1).reset_index(drop=True)
+# Shuffle the power plants if randomize_power_plants
+if randomize_power_plants:
+    # Shuffle the power plants
+    power_plants = power_plants.sample(frac=1).reset_index(drop=True)
+
 # set name as index
 power_plants.set_index("name", inplace=True)
 assigned_power_plants = []
@@ -34,7 +41,7 @@ assigned_power_plants = []
 
 @app.route("/")
 def index():
-    if config["clear_sessions"]:
+    if clear_sessions:
         # Call the function to clear all sessions
         clear_all_sessions()
 
@@ -179,7 +186,7 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
         # Simple check, replace with your actual validation logic
-        if username == "teacher" and password == config["teacher_password"]:
+        if username == "teacher" and password == teacher_password:
             session["user"] = "teacher"
             return redirect(url_for("teacher_view"))
         else:

@@ -1,21 +1,31 @@
 name,technology,capacity,variable_cost,fuel_cost,efficiency,ef
-Atomica,Nuclear,1000,3,2,32,0
-Coal King,Hard Coal,800,4,13,38,0.4
-GasGen,Gas,600,5,37,47,0.3
-ReactorX,Nuclear,1200,3.5,1,34,0
-CleanCoal,Hard Coal,500,4.5,8,42,0.3
-Spark Energy,Gas,300,5.5,38,36,0.2
-Fusion Future,Nuclear,1500,3.2,3,28,0
-Black Diamond,Hard Coal,700,4.2,11,41,0.4
-Blue Flame,Gas,400,4.8,37,45,0.2
-Uranium Power,Nuclear,1100,3.3,3,33,0
-Ember Energy,Hard Coal,600,4.7,10,9,0.4
-GasWorks,Gas,350,5.2,39,46,0.2
-Plutonium Peak,Nuclear,1300,3.1,2,29,0
-Coal Crest,Hard Coal,550,4.3,7,8,0.4
-Sun Gas,Gas,450,4.6,41,43,0.2
-Neutron Nexus,Nuclear,900,3.6,2,33,0
-Carbon Crusher,Hard Coal,750,4.1,8,44,0.4
-Blaze Bright,Gas,250,6.0,40,37,0.2
-Fusion Fields,Nuclear,1400,3.4,2,31,0
-Coal Canyon,Hard Coal,650,4.4,11,9,0.4
+Nucle-Larious,Nuclear,1000,3,2,32,0
+Coal Me Maybe,Hard Coal,800,4,13,38,0.4
+Gas-tastrophe,Gas,600,5,37,47,0.3
+Half-Life Strife,Nuclear,1200,3.5,1,34,0
+Coal-lateral Damage,Hard Coal,500,4.5,8,42,0.3
+Spark-tacular Disaster,Gas,300,5.5,38,36,0.2
+Fallout Boy,Nuclear,1500,3.2,3,28,0
+Diamonds Are For Heaters,Hard Coal,700,4.2,11,41,0.4
+The Gasp Chamber,Gas,400,4.8,37,45,0.2
+Uranus Power,Nuclear,1100,3.3,3,33,0
+Ember-assing Energy,Hard Coal,600,4.7,10,9,0.4
+The Gas-eous Clay,Gas,350,5.2,39,46,0.2
+Plutonium & The Peaks,Nuclear,1300,3.1,2,29,0
+Mount Coalmore,Hard Coal,550,4.3,7,8,0.4
+Sun Gas-ses At Night,Gas,450,4.6,41,43,0.2
+Neutron Dance,Nuclear,900,3.6,2,33,0
+Carbon Copy Crisis,Hard Coal,750,4.1,8,44,0.4
+Breaking Wind,Gas,250,6.0,40,37,0.2
+Fission Impossible,Nuclear,1400,3.4,2,31,0
+Canyon Y'all Afford Coal,Hard Coal,650,4.4,11,9,0.4
+Atomic Wedgie,Nuclear,950,3.7,2,30,0
+The Coalslaw Pit,Hard Coal,720,4.3,12,40,0.4
+Gas-tronomy From Hell,Gas,550,4.9,38,44,0.3
+Nucleus of the Problem,Nuclear,1250,3.4,2,32,0
+Coal-amity Jane,Hard Coal,580,4.6,9,39,0.4
+Methane to Madness,Gas,330,5.3,40,42,0.2
+Fission & Chips,Nuclear,1050,3.1,3,31,0
+Sooty McSootface,Hard Coal,630,4.8,10,43,0.4
+Gas Money Pit,Gas,420,5.0,39,41,0.3
+Chernobyl & The Meltdowns,Nuclear,980,3.5,2,34,0

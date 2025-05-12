@@ -54,8 +54,44 @@
                     <input type="radio" id="sell" name="bid_type" value="sell" {% if session['submitted_bid']['bid_type'] == 'sell' %} checked {% endif %}>
                     <label for="sell">Sell</label>
                 </div>
-                <input type="submit" value="Submit Bid">
+                <div id="error-message" style="color: red; display: none;">Bid volume cannot exceed the unit's capacity!</div>
+                <input type="submit" value="Submit Bid" id="submit-button">
             </form>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const bidPowerInput = document.getElementById('bid_power');
+                const submitButton = document.getElementById('submit-button');
+                const errorMessage = document.getElementById('error-message');
+                const maxCapacity = {{ assigned_power_plant['capacity'] }};
+                
+                // Set the max attribute on the input
+                bidPowerInput.setAttribute('max', maxCapacity);
+                
+                function validateBid() {
+                    const bidValue = parseInt(bidPowerInput.value, 10);
+                    if (bidValue > maxCapacity) {
+                        errorMessage.style.display = 'block';
+                        return false;
+                    } else {
+                        errorMessage.style.display = 'none';
+                        return true;
+                    }
+                }
+                
+                // Validate on input change
+                bidPowerInput.addEventListener('input', validateBid);
+                
+                // Validate on form submission
+                const form = document.querySelector('form');
+                form.addEventListener('submit', function(event) {
+                    if (!validateBid()) {
+                        event.preventDefault();
+                    }
+                });
+            });
+        </script>
+
         {% if session['submitted_bid'] %}
         <h2>Your Submitted Bid</h2>
         <p>Bid Volume (MW): {{ session['submitted_bid']['bid_power'] }}</p>
