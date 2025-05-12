@@ -1,128 +1,128 @@
-body {
+/* 1) Global box-sizing reset */
+*, *::before, *::after {
+    box-sizing: border-box;
+  }
+  
+  /* 2) Body */
+  body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
     margin: 0;
     padding: 20px;
     color: #333;
-}
-.container {
+  }
+  
+  /* 3) Container: flex layout that wraps */
+  .container {
     display: flex;
-    grid-template-columns: 1fr 1fr 1fr; /* Updated to accommodate three columns */
-    grid-gap: 20px;
-}
-
-.left-column, .middle-column { /* Corrected the selector */
+    flex-wrap: wrap;       /* allow wrap by default */
+    gap: 20px;
     background: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.scrollable-table {
-    max-height: 300px; /* Adjust the height as needed */
-    overflow-y: auto; /* Enables vertical scrolling */
-    border: 1px solid #ccc; /* Optional, adds a border around the scrollable area */
-    margin-bottom: 20px; /* Provides spacing below the table */
-}
-
-.right-column table {
-    width: 100%; /* Ensures the table uses the full width of its container */
-    border-collapse: collapse; /* Optional, for better table border handling */
-}
-
-.right-column th, .right-column td {
-    border: 1px solid #ddd; /* Optional, adds borders to cells */
-    padding: 8px; /* Adjust padding for better cell spacing */
-    text-align: left; /* Adjust text alignment as needed */
-}
-
-.merit-order-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Updated to accommodate three columns */
-    grid-gap: 20px;
-}
-
-.plot-column {
-
-    grid-column: 1 / -1;
+  }
+  
+  /* 4) Mobile‐first: all columns full-width */
+  .plot-column,
+  .left-column,
+  .middle-column,
+  .right-column {
+    flex: 1 1 100%;
     background: white;
     padding: 20px;
-    margin-top: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-h1, h2 {
+  }
+  
+  /* 5) Desktop: 70/30 split and no wrapping */
+  @media (min-width: 992px) {
+    .container {
+      flex-wrap: nowrap;
+    }
+    .plot-column {
+      flex: 1 1 70%;
+    }
+    .right-column {
+      flex: 1 1 30%;
+    }
+    /* if you still need left-/middle- elsewhere, adjust similarly */
+  }
+  
+  /* 6) Scrollable bids table wrapper with sticky header */
+  .scrollable-table {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+  .scrollable-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .scrollable-table thead th {
+    position: sticky;
+    top: 0;
+    background: #f0f0f0;
+    z-index: 2;
+  }
+  
+  /* 7) General table styling (non-scrollable tables) */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  th {
+    background-color: #f0f0f0;
+  }
+  
+  /* 8) Headings */
+  h1, h2 {
     color: #0056b3;
-    height: 20px;
     margin-bottom: 20px;
-}
-form {
-    margin-bottom: 20px;
-}
-label {
+  }
+  
+  /* 9) Form elements */
+  form {
+    margin: 20px 0;
+  }
+  label {
     display: block;
     margin-bottom: 10px;
     color: #666;
-}
-input[type="text"],
-input[type="number"],
-input[type="submit"] {
+  }
+  input[type="text"],
+  input[type="number"],
+  input[type="submit"],
+  button {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
     margin-bottom: 20px;
-    box-sizing: border-box;
-    border-radius: 4px;
     border: 1px solid #ccc;
-}
-input[type="submit"] {
+    border-radius: 4px;
+  }
+  input[type="submit"],
+  button {
     background-color: #28a745;
     color: white;
     border: none;
     cursor: pointer;
-}
-input[type="submit"]:hover {
+  }
+  input[type="submit"]:hover,
+  button:hover {
     background-color: #218838;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
-    padding: 20px;
-    color: #333;
-}
-.container {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-h1 {
-    color: #0056b3;
-}
-form {
-    margin-top: 20px;
-}
-label {
-    display: block;
-    margin-bottom: 10px;
-    color: #666;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-th, td {
-    text-align: left;
-    padding: 8px;
-    border-bottom: 1px solid #ddd;
-}
-th {
-    background-color: #f0f0f0;
-    position: -webkit-sticky; /* For Safari */
-    position: sticky;
-    top: 0;
-}
+  }
+  
+  /* 10) Admin‐reset button override */
+  .admin-controls button {
+    background-color: #ff9800;
+    padding: 8px 15px;
+    border-radius: 4px;
+  }
+  
