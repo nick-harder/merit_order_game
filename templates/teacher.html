@@ -79,10 +79,31 @@
             
             <div class="admin-controls" style="margin-top: 20px; padding-top: 15px; border-top: 1px solid #ccc;">
                 <h2>Admin Controls</h2>
-                <form action="{{ url_for('reset_assignments') }}" method="post">
-                  <button type="submit" style="background-color: #ff9800; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer;">🔄 Reset Student Assignments</button>
-                </form>
+                <button id="resetAssignmentsBtn" style="background-color: #ff9800; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer;">🔄 Reset Student Assignments</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal for powerplant selection -->
+    <div id="powerplantModal" class="modal" style="display:none; position:fixed; z-index:1; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.4);">
+        <div class="modal-content" style="background-color:#fefefe; margin:15% auto; padding:20px; border:1px solid #888; width:50%; border-radius:8px;">
+            <span class="close" style="color:#aaa; float:right; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
+            <h2>Select Powerplant Configuration</h2>
+            <p>Which powerplant configuration would you like to load?</p>
+            <form action="{{ url_for('reset_assignments') }}" method="post">
+                <div style="margin-bottom:15px;">
+                    <input type="radio" id="standard" name="powerplant_type" value="standard" checked>
+                    <label for="standard">Only Powerplants</label>
+                </div>
+                <div style="margin-bottom:20px;">
+                    <input type="radio" id="with_demand" name="powerplant_type" value="with_demand">
+                    <label for="with_demand">Powerplants and Demand Units</label>
+                </div>
+                <div style="text-align:right;">
+                    <button type="button" id="cancelReset" style="background-color:#ccc; color:black; padding:8px 15px; border:none; border-radius:4px; cursor:pointer; margin-right:10px;">Cancel</button>
+                    <button type="submit" style="background-color:#ff9800; color:white; padding:8px 15px; border:none; border-radius:4px; cursor:pointer;">Reset Assignments</button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -126,10 +147,36 @@
                 computeButton.title = "Set the demand and wait for student bids before computing market clearing price";
             }
         });
-        </script>
 
-        <script
-            src="{{ url_for('static', filename='js/meritOrderPlot.js') }}">
-        </script>
+        // Modal control for powerplant selection
+        document.addEventListener('DOMContentLoaded', function() {
+            var modal = document.getElementById("powerplantModal");
+            var btn = document.getElementById("resetAssignmentsBtn");
+            var span = document.getElementsByClassName("close")[0];
+            var cancelBtn = document.getElementById("cancelReset");
+            
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+            
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+            
+            cancelBtn.onclick = function() {
+                modal.style.display = "none";
+            }
+            
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+        });
+    </script>
+
+    <script
+        src="{{ url_for('static', filename='js/meritOrderPlot.js') }}">
+    </script>
 </body>
 </html>

@@ -6,8 +6,6 @@ import os
 
 # Replace YAML config with environment variables
 randomize_power_plants = os.environ.get('RANDOMIZE_POWER_PLANTS', 'true').lower() == 'true'
-load_storages = os.environ.get('LOAD_STORAGES', 'false').lower() == 'true'
-load_demand = os.environ.get('LOAD_DEMAND', 'false').lower() == 'true'
 clear_sessions = os.environ.get('CLEAR_SESSIONS', 'false').lower() == 'true'
 teacher_password = os.environ.get('TEACHER_PASSWORD', 'CiG_4005')
 secret_key = os.environ.get('SECRET_KEY', 'merit_oder_game_v1')
@@ -22,11 +20,9 @@ else:
 bid = Bid()
 teacher = Teacher()
 
-def init_power_plants():
+def init_power_plants(powerplant_type=None):
     # pull in whatever CSV you originally load
-    if load_storages:
-        df = pd.read_csv("powerplants_with_storages.csv")
-    elif load_demand:
+    if powerplant_type == "with_demand":
         df = pd.read_csv("powerplants_with_demand.csv")
     else:
         df = pd.read_csv("powerplants.csv")
@@ -193,16 +189,19 @@ def reset_assignments():
 
     global assigned_power_plants, power_plants
 
+    # Get selected powerplant type
+    powerplant_type = request.form.get("powerplant_type", None)
+
     # 1) Clear out which plants have been handed out
     assigned_power_plants.clear()
 
-    # 2) Reload & (re)shuffle the master list
-    power_plants = init_power_plants()
+    # 2) Reload & (re)shuffle the master list with selected type
+    power_plants = init_power_plants(powerplant_type)
 
     # 3) Wipe any stored bids
     bid.clear_bids()
 
-    # 4) Reset teacher’s parameters (demand, VRE, CO₂ price)
+    # 4) Reset teacher's parameters (demand, VRE, CO₂ price)
     teacher.reset()
 
     # 5) Rotate the secret key so every existing session cookie breaks
